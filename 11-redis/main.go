@@ -14,9 +14,10 @@ func main() {
 		DB:       0,  // use default DB
 	})
 
-	err := client.Set("wilson", "valor", time.Hour)
+	ok, err := client.Set("wilson", "valor", time.Hour).Result()
 	if err != nil {
 		log.Fatal("Failed to set: ", err)
 	}
 
+	log.Println("Wilson is setted: ", ok)
 }
