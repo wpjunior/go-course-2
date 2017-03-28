@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -14,10 +15,16 @@ func main() {
 		DB:       0,  // use default DB
 	})
 
-	ok, err := client.Set("wilson", "valor", time.Hour).Result()
+	ok, err := client.Set("wilson", "123", time.Hour).Result()
 	if err != nil {
 		log.Fatal("Failed to set: ", err)
 	}
 
 	log.Println("Wilson is setted: ", ok)
+
+	result, err := client.Get("wilson").Result()
+	if err != nil {
+		log.Fatal("Failed to get: ", err)
+	}
+	fmt.Println("O valor de wilson é ", result)
 }
