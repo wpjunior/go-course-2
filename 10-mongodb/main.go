@@ -4,8 +4,8 @@ import (
 	"errors"
 	"log"
 
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 )
 
 const PersonCollection = "person"
@@ -28,10 +28,9 @@ func (r *PersonRepository) Create(p *Person) error {
 
 	collection := session.DB("").C(PersonCollection)
 	err := collection.Insert(p)
-	if mongoErr, ok := err.(*mgo.LastError); ok {
-		if mongoErr.Code == 11000 {
-			return ErrDuplicatedPerson
-		}
+	mongoErr, ok := err.(*mgo.LastError)
+	if ok && mongoErr.Code == 11000 {
+		return ErrDuplicatedPerson
 	}
 	return err
 }

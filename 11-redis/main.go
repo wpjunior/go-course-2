@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"gopkg.in/redis.v5"
+	"github.com/go-redis/redis"
 )
 
 func main() {

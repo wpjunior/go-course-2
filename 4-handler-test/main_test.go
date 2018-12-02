@@ -5,39 +5,27 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"gopkg.in/check.v1"
+	"github.com/stretchr/testify/assert"
 )
 
-func Test(t *testing.T) {
-	check.TestingT(t)
-}
-
-type MyHandlerSuite struct {
-	handler http.Handler
-}
-
-var _ = check.Suite(&MyHandlerSuite{})
-
-func (s *MyHandlerSuite) SetUpSuite(c *check.C) {
-	s.handler = &MyHandler{}
-}
-
-func (s *MyHandlerSuite) TestOK(c *check.C) {
+func TestHandlerOK(t *testing.T) {
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
-	s.handler.ServeHTTP(w, r)
+	handler := &MyHandler{}
+	handler.ServeHTTP(w, r)
 
-	c.Assert(w.Code, check.Equals, http.StatusOK)
-	c.Assert(w.Body.String(), check.Equals, "Hello warriors")
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "Hello warriors", w.Body.String())
 }
 
-func (s *MyHandlerSuite) TestFail(c *check.C) {
+func TestHandlerFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
-	s.handler.ServeHTTP(w, r)
+	handler := &MyHandler{}
+	handler.ServeHTTP(w, r)
 
-	c.Check(w.Code, check.Equals, http.StatusNotFound)
-	c.Assert(w.Body.String(), check.Equals, "Fail")
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Equal(t, "Fail", w.Body.String())
 }
